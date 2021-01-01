@@ -60,6 +60,11 @@ stages {
       }
  }
 }
+     stage('Deploy War') {
+      steps {
+        sh label: '', script: 'ansible-playbook tomcat.yml'
+      }
+ }
 post {
         success {
             mail to:"raknas000@gmail.com", subject:"SUCCESS: ${currentBuild.fullDisplayName}", body: "Build success"
