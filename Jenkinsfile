@@ -54,17 +54,17 @@ stages {
         //}
     }
 }
+    stage('Deploy War') {
+      steps {
+        sh label: '', script: 'ansible-playbook tomcat.yml'
+      }
+ }
      stage('Artifact upload') {
       steps {
      nexusPublisher nexusInstanceId: '1234', nexusRepositoryId: 'releases', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: 'target/helloworld.war']], mavenCoordinate: [artifactId: 'hello-world-servlet-example', groupId: 'com.geekcap.vmturbo', packaging: 'war', version: '$BUILD_NUMBER']]]
       }
  }
 }
-     //stage('Deploy War') {
-      //steps {
-        //sh label: '', script: 'ansible-playbook tomcat.yml'
-     // }
-// }
 post {
         success {
             mail to:"raknas000@gmail.com", subject:"SUCCESS: ${currentBuild.fullDisplayName}", body: "Build success"
