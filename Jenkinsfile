@@ -56,9 +56,11 @@ stages {
 }
     stage('install tomcat using ansible') {
       steps {
-        sh label: '', script: 'ansible-playbook tomcat.yml'
+       // sh label: '', script: 'ansible-playbook tomcat.yml'
+          ansiblePlaybook '/var/lib/jenkins/tomcat.yml'
       }
  }
+    
     stage('Deploy war'){
         steps{
     deploy adapters: [tomcat8(credentialsId: 'Tomcat', path: '', url: 'http://172.31.27.104:8080/')], contextPath: null, onFailure: false, war: '**/*.war'
