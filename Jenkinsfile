@@ -54,11 +54,16 @@ stages {
         //}
     }
 }
-    stage('Deploy War') {
+    stage('install tomcat using ansible') {
       steps {
         sh label: '', script: 'ansible-playbook tomcat.yml'
       }
  }
+    stage('Deploy war'){
+        steps{
+    deploy adapters: [tomcat8(credentialsId: 'Tomcat', path: '', url: 'http://172.31.27.104:8080/')], contextPath: null, onFailure: false, war: '**/*.war'
+        }
+    }
      stage('Artifact upload') {
       steps {
      nexusPublisher nexusInstanceId: '1234', nexusRepositoryId: 'releases', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: 'target/helloworld.war']], mavenCoordinate: [artifactId: 'hello-world-servlet-example', groupId: 'com.geekcap.vmturbo', packaging: 'war', version: '$BUILD_NUMBER']]]
